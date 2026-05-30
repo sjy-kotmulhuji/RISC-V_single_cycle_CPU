@@ -260,14 +260,7 @@ C언어 작성 → RISC-V Assembly 변환 → Hex Dump 변환 → ROM에 저장
 
 ### S-Type 설계 (SB, SH)
 
-**문제**: Word Addressing 기반 메모리에서 SB(1바이트), SH(2바이트) 단위로 특정 위치에만 데이터를 저장해야 함
+**문제**: Word Addressing 기반 메모리에서 SB(1바이트), SH(2바이트) 단위로 특정 bit에만 데이터를 저장해야 하는데 로직 오류로 32bit 전체에 저장하게 됨.
 
-**해결**: `daddr` 하위 2비트를 이용하여 Data Memory의 각 8bit 위치에 접근할 수 있도록 구현
+**해결**: `daddr` 하위 2비트와 byte_en 신호를 이용해 Data Memory의 원하는 bit에 접근할 수 있도록 구현
 
-```verilog
-// SB: 하위 2비트로 8bit 위치 선택
-dmem[daddr[31:2]] <= {dmem[daddr[31:2]][31:8], dwdata[7:0]};   // [7:0]
-
-// SH: 하위 1비트로 16bit 위치 선택  
-dmem[daddr[31:2]] <= {dmem[daddr[31:2]][31:16], dwdata[15:0]}; // [15:0]
-```
