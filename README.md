@@ -4,25 +4,6 @@
 
 ---
 
-
-
-
-
-
-
-<img width="2319" height="1219" alt="Image" src="https://github.com/user-attachments/assets/7be68def-079d-4db1-8dee-6e19cf0330ef" />
-
-<img width="2316" height="1220" alt="Image" src="https://github.com/user-attachments/assets/f13a9997-55ab-448a-8e9a-fabce7100bb3" />
-
-<img width="2319" height="1220" alt="Image" src="https://github.com/user-attachments/assets/97b5de0b-5999-4899-a7fd-91bf26e80260" />
-
-<img width="2319" height="1214" alt="Image" src="https://github.com/user-attachments/assets/1a11c265-38b2-46fa-a037-2ece2a6dfa6e" />
-
-<img width="2319" height="1235" alt="Image" src="https://github.com/user-attachments/assets/35c27a2c-0318-4b21-9c84-392256f0d691" />
-
-<img width="2323" height="1225" alt="Image" src="https://github.com/user-attachments/assets/39b3d0d1-49a1-40f0-8de9-865625d75fc3" />
-
-
 ## 📌 프로젝트 개요
 
 - RV32I 명령어 셋을 기반으로 하는 RISC-V 구조의 Single Cycle CPU 설계
@@ -150,6 +131,8 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 ### S-Type (Store Type)
 레지스터에 저장된 값을 메모리에 저장합니다.
+#### Datapath
+<img width="2319" height="1219" alt="Image" src="https://github.com/user-attachments/assets/7be68def-079d-4db1-8dee-6e19cf0330ef" />
 
 **동작 순서**
 1. Register File에서 rs1, rs2 값 Read
@@ -162,6 +145,9 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 ### I-Type (Load)
 메모리에 저장된 값을 레지스터로 Load합니다.
+#### Datapath
+<img width="2316" height="1220" alt="Image" src="https://github.com/user-attachments/assets/f13a9997-55ab-448a-8e9a-fabce7100bb3" />
+
 
 **동작 순서**
 1. 메모리의 rs1 + imm 번지 데이터 읽기
@@ -173,6 +159,8 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 ### I-Type (연산)
 Imm 값을 이용해 연산한 결과를 레지스터에 저장합니다.
+#### Datapath
+<img width="2319" height="1220" alt="Image" src="https://github.com/user-attachments/assets/97b5de0b-5999-4899-a7fd-91bf26e80260" />
 
 **동작 순서**
 1. rs1, imm 값을 ALU에서 명령에 따라 연산
@@ -184,6 +172,8 @@ Imm 값을 이용해 연산한 결과를 레지스터에 저장합니다.
 
 ### JALR (Jump And Link Register)
 복귀할 주소를 rd에 저장(Link)하고 목적지로 Jump합니다.
+#### Datapath
+<img width="2319" height="1214" alt="Image" src="https://github.com/user-attachments/assets/1a11c265-38b2-46fa-a037-2ece2a6dfa6e" />
 
 **동작**
 ```
@@ -195,6 +185,8 @@ PC  = rs1 + imm (Jump)
 
 ### U-Type (Upper Immediate Type)
 12비트보다 큰 Imm 값이 필요할 때 사용합니다.
+#### Datapath
+<img width="2319" height="1235" alt="Image" src="https://github.com/user-attachments/assets/35c27a2c-0318-4b21-9c84-392256f0d691" />
 
 **동작**
 ```
@@ -208,6 +200,8 @@ AUIPC : rd = PC + {imm, 12'h000}
 
 ### J-Type (Jump Type)
 돌아올 주소를 저장하고 PC를 Jump합니다. JALR과 달리 현재 PC 기준으로 Jump하므로 비교적 가까운 함수 호출에 사용됩니다.
+#### Datapath
+<img width="2323" height="1225" alt="Image" src="https://github.com/user-attachments/assets/39b3d0d1-49a1-40f0-8de9-865625d75fc3" />
 
 **동작**
 ```
