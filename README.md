@@ -32,14 +32,21 @@
 | 메모리 접근 | Load/Store를 통해서만 가능 |
 | ISA | RV32I (Base Integer Instruction Set) |
 
-### Single Cycle CPU란?
 
-명령어 처리 과정을 1 클락 사이클 내에 모두 완료하는 구조입니다.
-
-**명령어 처리 5단계**
+### 명령어 처리 5단계
 ```
 IF (Instruction Fetch) → ID (Instruction Decode) → EX (Execute) → MEM (Memory) → WB (Write Back)
 ```
+
+### Single Cycle CPU란?
+<img width="1940" height="537" alt="image" src="https://github.com/user-attachments/assets/efaacbb1-93e0-45e1-9096-d4a8bde32602" />
+
+- 명령어 처리 과정을 1 클락 사이클 내에 모두 완료하는 구조
+- 클락 주기는 처리 시간이 가장 긴 명령어에 맞춤
+- 장점: 하드웨어 구조가 단순함
+- 단점: 모든 명령어가 가장 오래 걸리는 명령어 속도에 맞추므로 클럭 효율이 좋지 않음
+
+
 
 ---
 
