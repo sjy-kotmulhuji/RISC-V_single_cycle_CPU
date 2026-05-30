@@ -1,49 +1,232 @@
+# RISC-V Single Cycle CPU
 
-# RISC-V Single Cycle CPU Design and Simulation
+> RV32I Instruction Set 기반 Single Cycle CPU 설계 (SystemVerilog)
 
-이 프로젝트는 **RV32I 명령어 셋**을 기반으로 하는 **RISC-V 구조의 Single Cycle CPU**를 **System Verilog**로 설계하고 시뮬레이션한 프로젝트입니다.
+---
 
-## 1. 프로젝트 개요
-*   **목표**: RISC-V RV32I 명령어 셋의 Type별 설계 및 동작 검증.
-*   **설계 방식**: 명령어 처리 5단계(IF, ID, EX, MEM, WB)를 한 클락(Single Cycle) 내에 완료하는 구조.
-*   **개발 환경**: System Verilog, Vivado (Simulation 분석).
-*   **교육 과정**: 대한상공회의소 서울기술교육센터 온디바이스AI 반도체 설계 1기.
+## 📌 프로젝트 개요
 
-## 2. 프로세서 아키텍처
-### 전체 블록 다이어그램
-CPU는 크게 네 개의 주요 모듈로 구성됩니다.
-*   **Instruction Memory (ROM)**: 명령어를 저장하는 공간으로 Word Addressing을 사용합니다.
-*   **Control Unit**: 명령어를 해독하여 Datapath에 동작 신호를 전달합니다.
-*   **Data Memory (RAM)**: 데이터 저장 공간으로 Word Addressing을 사용합니다.
-*   **Datapath**: 실제 연산이 수행되는 경로로 PC, Register File, ALU, Immediate Extender 등으로 구성됩니다.
+- RV32I 명령어 셋을 기반으로 하는 RISC-V 구조의 Single Cycle CPU 설계
+- RV32I 명령어 셋 Type 별 설계 및 Simulation 검증
+- C언어 코드를 활용한 Adder 예제 Code & Simulation 분석
 
-### 주요 모듈 기능
-*   **Register File**: 연산에 필요한 데이터를 읽고 결과를 저장하는 32개의 임시 저장 공간입니다.
-*   **ALU (Arithmetic Logic Unit)**: 명령어에 따른 산술 연산 및 비교를 실행합니다.
-*   **Immediate Extender**: 상숫값(Imm)을 32비트로 Sign Extension 합니다.
+---
 
-## 3. 지원 명령어 셋 (RV32I)
-기본 정수 명령어 세트인 RV32I의 6가지 타입 명령어를 모두 지원하도록 설계되었습니다.
+## 🛠️ 개발 환경
 
-| 타입 | 설명 | 주요 명령어 |
-| :--- | :--- | :--- |
-| **R-Type** | 레지스터 간 연산 | ADD, SUB, SLL, SLT, XOR, SRL, OR, AND |
-| **I-Type** | 상수(Imm) 연산 및 Load | ADDI, SLTI, XORI, ORI, ANDI, LW, LB, LH 등 |
-| **S-Type** | 메모리 저장 (Store) | SW, SB, SH |
-| **B-Type** | 조건 분기 (Branch) | BEQ, BNE, BLT, BGE, BLTU, BGEU |
-| **U-Type** | 상위 20비트 상수 처리 | LUI, AUIPC |
-| **J-Type** | 무조건 점프 (Jump) | JAL, JALR |
+- Language: SystemVerilog
+- Tool: Vivado (Simulation)
 
-## 4. 시뮬레이션 및 검증
-각 명령어 타입별로 검증 시나리오를 작성하여 **Vivado Simulator**를 통해 동작을 확인했습니다.
+---
 
-*   **R-Type**: 산술/논리 연산 결과가 레지스터(rd)에 정확히 Write Back 되는지 확인.
-*   **B-Type**: 비교 조건 만족 시 PC 값이 상숫값만큼 정상적으로 Jump 하는지 검증.
-*   **Load/Store**: 메모리 주소 계산 및 Byte/Half-word 단위의 데이터 접근 동작 확인.
-*   **실제 예제**: C언어로 작성된 '1부터 10까지 합산' 코드를 어셈블리로 변환하여 CPU에서 최종 결과값(55)이 산출되는 것을 확인했습니다.
+## 📐 아키텍처 개요
 
-## 5. 트러블슈팅 (Trouble Shooting)
-### S-Type 설계 시 메모리 접근 문제
-*   **문제**: 초기 설계 시 `SB`(Byte), `SH`(Half-word) 명령어 수행 중 메모리의 특정 비트에만 접근하는 데 어려움이 있었습니다.
-*   **해결**: `daddr`의 하위 2비트를 활용한 `byte_en` 신호를 생성하여, 메모리의 각 8비트 구역에 개별적으로 접근할 수 있도록 로직을 수정하여 해결했습니다.
-*   
+### RISC-V란?
+
+2010년 UC Berkeley에서 개발한 무료 오픈소스 ISA(Instruction Set Architecture)로, RISC(Reduced Instruction Set Computer) 방식으로 설계되었습니다.
+
+| 특징 | 내용 |
+|------|------|
+| 명령어 길이 | 32비트 고정 |
+| 명령어 구조 | 명령어 하나 당 동작 하나 |
+| 메모리 접근 | Load/Store를 통해서만 가능 |
+| ISA | RV32I (Base Integer Instruction Set) |
+
+### Single Cycle CPU란?
+
+명령어 처리 과정을 1 클락 사이클 내에 모두 완료하는 구조입니다.
+
+**명령어 처리 5단계**
+```
+IF (Instruction Fetch) → ID (Instruction Decode) → EX (Execute) → MEM (Memory) → WB (Write Back)
+```
+
+---
+
+## 🧱 Block Diagram
+
+### 전체 구조
+
+| 모듈 | 설명 |
+|------|------|
+| Instruction Memory (ROM) | 명령어 저장 공간. Word Addressing 사용 |
+| Control Unit | 명령어를 해독해 Datapath에 동작 신호 전달 |
+| Data Memory (RAM) | 데이터 저장 공간. Word Addressing 사용 |
+| Datapath | Control Unit 신호를 받아 명령 실행 및 결과 도출 |
+
+### Datapath 구성 모듈
+
+| 모듈 | 설명 |
+|------|------|
+| Register File | CPU 내부에서 연산에 필요한 데이터를 읽고, 연산 결과를 Write Back하는 임시 저장 공간 |
+| Immediate Extender | Imm 값을 32bit로 Sign Extension |
+| ALU | 명령에 따른 연산 및 비교 실행 |
+| Write Back MUX | 명령에 따라 Register File에 Write Back할 데이터 선택 |
+| Program Counter | 실행될 명령어의 주소 제어 |
+
+---
+
+## 📋 RV32I Instruction Set
+
+RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비트이며 6가지 타입으로 구분됩니다.
+
+### 명령어 필드 설명
+
+| 필드 | 설명 |
+|------|------|
+| `opcode` | 명령어 Type 구분 |
+| `funct3` | 해당 Type 명령 중 어떤 연산인지 구분 |
+| `funct7` | funct3만으로 구분 불가한 경우 사용 (R-Type 전용) |
+| `imm` | 즉시값 (상수) |
+| `rs1`, `rs2` | 연산에 필요한 데이터의 레지스터 인덱스 |
+| `rd` | 연산 결과를 저장할 레지스터 인덱스 |
+
+### Control Unit Signal Truth Table
+
+| Type | rf_we | alu_src | alu_control | branch | jal | jalr | rfwd_src | o_funct3 | dwe |
+|------|:-----:|:-------:|:-----------:|:------:|:---:|:----:|:--------:|:--------:|:---:|
+| R | 1 | 0 | {funct7[5], funct3} | 0 | 0 | 0 | 000 | 000 | 0 |
+| B | 0 | 0 | {1'b0, funct3} | 1 | 0 | 0 | 000 | 000 | 0 |
+| S | 0 | 1 | 0000 | 0 | 0 | 0 | 000 | funct3 | 1 |
+| JALR | 1 | 1 | 0000 | 0 | 1 | 1 | 100 | 000 | 0 |
+| I (Load) | 1 | 1 | 0000 | 0 | 0 | 0 | 001 | funct3 | 0 |
+| I (연산) | 1 | 1 | {funct7[5], funct3} / {1'b0, funct3} | 0 | 0 | 0 | 000 | funct3 | 0 |
+| U (LUI) | 1 | 1 | 0000 | 0 | 0 | 0 | 010 | 000 | 0 |
+| U (AUIPC) | 1 | 1 | 0000 | 0 | 0 | 0 | 011 | 000 | 0 |
+| J | 1 | 1 | 0000 | 0 | 1 | 0 | 100 | 000 | 0 |
+
+---
+
+## 🔍 Type별 상세 설명
+
+### R-Type (Register Type)
+레지스터 값 2개를 연산한 결과를 레지스터에 저장합니다.
+
+**동작 순서**
+1. Register File에서 rs1, rs2 값 Read
+2. ALU에서 연산
+3. 연산 결과 Register File rd에 Write Back
+
+**명령어**: `ADD` `SUB` `SLL` `SLT` `SLTU` `XOR` `SRL` `SRA` `OR` `AND`
+
+---
+
+### B-Type (Branch Type)
+조건 만족 시 `PC += imm`, 불만족 시 `PC += 4`로 분기합니다.
+
+**동작 순서**
+1. Register File에서 rs1, rs2 값 Read
+2. 비교 결과가 조건에 부합하면 btaken 신호 출력
+3. btaken = 1이면 PC += imm
+
+**명령어**: `BEQ` `BNE` `BLT` `BGE` `BLTU` `BGEU`
+
+---
+
+### S-Type (Store Type)
+레지스터에 저장된 값을 메모리에 저장합니다.
+
+**동작 순서**
+1. Register File에서 rs1, rs2 값 Read
+2. 메모리 Write Address: rs1 + imm
+3. 메모리 Write Data: rs2
+
+**명령어**: `SW` `SH` `SB`
+
+---
+
+### I-Type (Load)
+메모리에 저장된 값을 레지스터로 Load합니다.
+
+**동작 순서**
+1. 메모리의 rs1 + imm 번지 데이터 읽기
+2. Write Back MUX를 통해 레지스터에 Load
+
+**명령어**: `LB` `LH` `LW` `LBU` `LHU`
+
+---
+
+### I-Type (연산)
+Imm 값을 이용해 연산한 결과를 레지스터에 저장합니다.
+
+**동작 순서**
+1. rs1, imm 값을 ALU에서 명령에 따라 연산
+2. 레지스터에 Write Back
+
+**명령어**: `ADDI` `SLTI` `SLTIU` `XORI` `ORI` `ANDI` `SLLI` `SRLI` `SRAI`
+
+---
+
+### JALR (Jump And Link Register)
+복귀할 주소를 rd에 저장(Link)하고 목적지로 Jump합니다.
+
+**동작**
+```
+rd  = PC + 4   (복귀 주소 저장)
+PC  = rs1 + imm (Jump)
+```
+
+---
+
+### U-Type (Upper Immediate Type)
+12비트보다 큰 Imm 값이 필요할 때 사용합니다.
+
+**동작**
+```
+LUI   : rd = {imm, 12'h000}
+AUIPC : rd = PC + {imm, 12'h000}
+```
+
+**명령어**: `LUI` `AUIPC`
+
+---
+
+### J-Type (Jump Type)
+돌아올 주소를 저장하고 PC를 Jump합니다. JALR과 달리 현재 PC 기준으로 Jump하므로 비교적 가까운 함수 호출에 사용됩니다.
+
+**동작**
+```
+rd = PC + 4   (복귀 주소 저장)
+PC += imm     (Jump)
+```
+
+**명령어**: `JAL`
+
+---
+
+## 💻 C & Assembly 활용 예제
+
+### Adder 예제
+
+1~10까지 합한 값을 구하는 프로그램을 C언어로 작성 후 RISC-V Assembly로 변환하여 검증하였습니다.
+
+**코드 변환 과정**
+```
+C언어 작성 → RISC-V Assembly 변환 → Hex Dump 변환 → ROM에 저장
+```
+
+**주요 레지스터**
+
+| 레지스터 | ABI 명칭 | 역할 |
+|---------|---------|------|
+| x1 | ra | Return Address (함수 종료 후 돌아갈 주소) |
+| x2 | sp | Stack Pointer (현재 스택 top 위치) |
+| x8 | s0 | Frame Pointer (현재 함수 스택의 기준점) |
+
+---
+
+## 🐛 Trouble Shooting
+
+### S-Type 설계 (SB, SH)
+
+**문제**: Word Addressing 기반 메모리에서 SB(1바이트), SH(2바이트) 단위로 특정 위치에만 데이터를 저장해야 함
+
+**해결**: `daddr` 하위 2비트를 이용하여 Data Memory의 각 8bit 위치에 접근할 수 있도록 구현
+
+```verilog
+// SB: 하위 2비트로 8bit 위치 선택
+dmem[daddr[31:2]] <= {dmem[daddr[31:2]][31:8], dwdata[7:0]};   // [7:0]
+
+// SH: 하위 1비트로 16bit 위치 선택  
+dmem[daddr[31:2]] <= {dmem[daddr[31:2]][31:16], dwdata[15:0]}; // [15:0]
+```
