@@ -4,6 +4,25 @@
 
 ---
 
+
+
+
+
+
+
+<img width="2319" height="1219" alt="Image" src="https://github.com/user-attachments/assets/7be68def-079d-4db1-8dee-6e19cf0330ef" />
+
+<img width="2316" height="1220" alt="Image" src="https://github.com/user-attachments/assets/f13a9997-55ab-448a-8e9a-fabce7100bb3" />
+
+<img width="2319" height="1220" alt="Image" src="https://github.com/user-attachments/assets/97b5de0b-5999-4899-a7fd-91bf26e80260" />
+
+<img width="2319" height="1214" alt="Image" src="https://github.com/user-attachments/assets/1a11c265-38b2-46fa-a037-2ece2a6dfa6e" />
+
+<img width="2319" height="1235" alt="Image" src="https://github.com/user-attachments/assets/35c27a2c-0318-4b21-9c84-392256f0d691" />
+
+<img width="2323" height="1225" alt="Image" src="https://github.com/user-attachments/assets/39b3d0d1-49a1-40f0-8de9-865625d75fc3" />
+
+
 ## 📌 프로젝트 개요
 
 - RV32I 명령어 셋을 기반으로 하는 RISC-V 구조의 Single Cycle CPU 설계
@@ -46,6 +65,7 @@ IF (Instruction Fetch) → ID (Instruction Decode) → EX (Execute) → MEM (Mem
 ## 🧱 Block Diagram
 
 ### 전체 구조
+<img width="2389" height="1575" alt="Image" src="https://github.com/user-attachments/assets/2827d29f-fffe-4f38-9c72-ebd2acf26bcc" />
 
 | 모듈 | 설명 |
 |------|------|
@@ -69,6 +89,7 @@ IF (Instruction Fetch) → ID (Instruction Decode) → EX (Execute) → MEM (Mem
 ## 📋 RV32I Instruction Set
 
 RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비트이며 6가지 타입으로 구분됩니다.
+<img width="3325" height="447" alt="Image" src="https://github.com/user-attachments/assets/c55d32d5-2d44-440b-b9c4-67b73b586880" />
 
 ### 명령어 필드 설명
 
@@ -101,6 +122,8 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 ### R-Type (Register Type)
 레지스터 값 2개를 연산한 결과를 레지스터에 저장합니다.
+#### Datapath
+<img width="2381" height="1263" alt="Image" src="https://github.com/user-attachments/assets/fdf236fb-851a-46df-8cdc-c7e34e7ec506" />
 
 **동작 순서**
 1. Register File에서 rs1, rs2 값 Read
@@ -113,6 +136,8 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 ### B-Type (Branch Type)
 조건 만족 시 `PC += imm`, 불만족 시 `PC += 4`로 분기합니다.
+#### Datapath
+<img width="2332" height="1229" alt="Image" src="https://github.com/user-attachments/assets/613b2a37-6d47-46ea-93f3-05f104e1e658" />
 
 **동작 순서**
 1. Register File에서 rs1, rs2 값 Read
