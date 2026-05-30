@@ -113,6 +113,9 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 **명령어**: `ADD` `SUB` `SLL` `SLT` `SLTU` `XOR` `SRL` `SRA` `OR` `AND`
 
+#### R-Type Instruction Simulation
+<img width="1408" height="465" alt="Image" src="https://github.com/user-attachments/assets/9b99f578-3f9f-4580-8a55-607b955abbf1" />
+
 ---
 
 ### B-Type (Branch Type)
@@ -126,6 +129,9 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 3. btaken = 1이면 PC += imm
 
 **명령어**: `BEQ` `BNE` `BLT` `BGE` `BLTU` `BGEU`
+
+#### B-Type Instruction Simulation
+<img width="1567" height="521" alt="Image" src="https://github.com/user-attachments/assets/f5dcee51-0040-458d-8bc6-d7804fac6966" />
 
 ---
 
@@ -141,6 +147,9 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 **명령어**: `SW` `SH` `SB`
 
+#### S-Type Instruction(SW) Simulation
+<img width="763" height="502" alt="Image" src="https://github.com/user-attachments/assets/cdd6fcab-3510-4fc2-933a-ebe834d5bc2a" />
+
 ---
 
 ### I-Type (Load)
@@ -155,6 +164,9 @@ RISC-V의 기본 정수 명령어 세트로, 레지스터 크기(XLEN)는 32비�
 
 **명령어**: `LB` `LH` `LW` `LBU` `LHU`
 
+#### IL-Type Instruction Simulation
+<img width="966" height="532" alt="Image" src="https://github.com/user-attachments/assets/ea68a94f-76b5-499b-8e48-445e60ce87fa" />
+
 ---
 
 ### I-Type (연산)
@@ -168,6 +180,9 @@ Imm 값을 이용해 연산한 결과를 레지스터에 저장합니다.
 
 **명령어**: `ADDI` `SLTI` `SLTIU` `XORI` `ORI` `ANDI` `SLLI` `SRLI` `SRAI`
 
+#### I-Type Instruction Simulation
+<img width="1027" height="435" alt="Image" src="https://github.com/user-attachments/assets/517036d2-6962-454b-8270-7a1d978be8a5" />
+
 ---
 
 ### JALR (Jump And Link Register)
@@ -180,7 +195,8 @@ Imm 값을 이용해 연산한 결과를 레지스터에 저장합니다.
 rd  = PC + 4   (복귀 주소 저장)
 PC  = rs1 + imm (Jump)
 ```
-
+#### JALR Instruction Simulation
+<img width="927" height="412" alt="Image" src="https://github.com/user-attachments/assets/fe645158-187c-4428-8791-dfeeca6bea1d" />
 ---
 
 ### U-Type (Upper Immediate Type)
@@ -196,6 +212,9 @@ AUIPC : rd = PC + {imm, 12'h000}
 
 **명령어**: `LUI` `AUIPC`
 
+#### U-Type Instruction Simulation
+<img width="1067" height="442" alt="Image" src="https://github.com/user-attachments/assets/74fcd4cc-415a-4c6b-9854-3f96bc9a439b" />
+
 ---
 
 ### J-Type (Jump Type)
@@ -210,6 +229,9 @@ PC += imm     (Jump)
 ```
 
 **명령어**: `JAL`
+
+#### J-Type Instruction Simulation
+<img width="852" height="417" alt="Image" src="https://github.com/user-attachments/assets/4f72a19a-45b4-4f2d-a8a7-1c6b79a6df3b" />
 
 ---
 
