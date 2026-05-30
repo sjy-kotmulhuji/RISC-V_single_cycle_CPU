@@ -258,7 +258,7 @@ C언어 작성 → RISC-V Assembly 변환 → Hex Dump 변환 → ROM에 저장
 
 ## 🐛 Trouble Shooting
 
-### S-Type 설계 (SB, SH)
+#### S-Type 명령어 로직 오류
 
 **문제**: Word Addressing 기반 메모리에서 SB(1바이트), SH(2바이트) 단위로 특정 bit에만 데이터를 저장해야 하는데 로직 오류로 32bit 전체에 저장하게 됨.
 
