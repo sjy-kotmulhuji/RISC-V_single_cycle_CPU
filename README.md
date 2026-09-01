@@ -1,6 +1,6 @@
 # RISC-V Single Cycle CPU
 
-> RV32I Instruction Set 기반 Single Cycle CPU 설계 (SystemVerilog)
+> 온디바이스AI 시스템 반도체 설계 1기 | 송주연 | 대한상공회의소 서울기술교육센터 | 2026.03.17
 
 ---
 
